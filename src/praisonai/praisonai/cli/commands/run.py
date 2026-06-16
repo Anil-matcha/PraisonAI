@@ -371,12 +371,14 @@ def _run_prompt(
                 )
             
             # Add session support to Agent if needed
-            if session_id:
-                agent_config["resume_session"] = session_id
-            if auto_save_name:
-                agent_config["auto_save"] = auto_save_name
-            
+            from ..utils.project import build_cli_memory_config, apply_cli_session_continuity
+            mem_cfg = build_cli_memory_config(session_id=session_id, auto_save=auto_save_name)
+            if mem_cfg:
+                agent_config["memory"] = mem_cfg
+
             agent = Agent(**agent_config)
+            if session_id or auto_save_name:
+                apply_cli_session_continuity(agent, session_id or auto_save_name)
             result = agent.start(prompt)
             
             output.emit_result(
@@ -461,12 +463,14 @@ def _run_prompt(
                 )
             
             # Add session support to Agent if needed
-            if session_id:
-                agent_config["resume_session"] = session_id
-            if auto_save_name:
-                agent_config["auto_save"] = auto_save_name
-            
+            from ..utils.project import build_cli_memory_config, apply_cli_session_continuity
+            mem_cfg = build_cli_memory_config(session_id=session_id, auto_save=auto_save_name)
+            if mem_cfg:
+                agent_config["memory"] = mem_cfg
+
             agent = Agent(**agent_config)
+            if session_id or auto_save_name:
+                apply_cli_session_continuity(agent, session_id or auto_save_name)
             result = agent.start(prompt)
             
             output.emit_result(
